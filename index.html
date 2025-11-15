@@ -1,0 +1,2738 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>thegioihu — Thế giới hủ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --pink-soft: #FFCED2;
+      --pink-soft-2: #FFBBC0;
+      --bg-main: #fff5f6;
+      --bg-card: #ffffff;
+      --text-main: #2f172a;
+      --text-muted: #7a5a6a;
+      --accent: #ff6f91;
+      --accent-dark: #e4557a;
+      --border-soft: #ffd9de;
+      --danger: #d90032;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #ffe3ea, #fff5f6 40%, #ffd9e3 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ===== PASSWORD GATE ===== */
+    .gate-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: linear-gradient(135deg, #FFCED2, #FFBBC0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .gate-box {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 24px 22px;
+      max-width: 360px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+      text-align: center;
+      backdrop-filter: blur(8px);
+      border: 1px solid #ffe2ea;
+    }
+
+    .gate-logo {
+      font-weight: 800;
+      font-size: 26px;
+      letter-spacing: 1px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .gate-logo span {
+      color: var(--accent);
+    }
+
+    .gate-logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: 2px solid var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--accent);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gate-logo-mark::after {
+      content: "";
+      position: absolute;
+      inset: 60% -40%;
+      background: linear-gradient(135deg, transparent, rgba(255,255,255,0.8), transparent);
+      transform: rotate(-20deg);
+    }
+
+    .gate-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .age-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(217, 0, 50, 0.05);
+      color: var(--danger);
+      border: 1px solid rgba(217, 0, 50, 0.2);
+      margin-bottom: 16px;
+    }
+
+    .gate-form label {
+      display: block;
+      text-align: left;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+    }
+
+    .gate-input {
+      width: 100%;
+      padding: 8px 11px;
+      border-radius: 999px;
+      border: 1px solid #ffd9e3;
+      outline: none;
+      font-size: 14px;
+      background: #fffafa;
+      margin-bottom: 10px;
+    }
+
+    .gate-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(255, 111, 145, 0.2);
+    }
+
+    .gate-btn {
+      width: 100%;
+      border-radius: 999px;
+      border: none;
+      padding: 9px 12px;
+      font-size: 14px;
+      font-weight: 600;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+
+    .gate-btn:hover {
+      background: var(--accent-dark);
+    }
+
+    .gate-error {
+      font-size: 12px;
+      color: var(--danger);
+      min-height: 16px;
+      margin-top: 6px;
+    }
+
+    .gate-note {
+      margin-top: 14px;
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* ===== APP LAYOUT ===== */
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(20px);
+      background: linear-gradient(to right, rgba(255, 245, 246, 0.92), rgba(255, 232, 237, 0.96));
+      border-bottom: 1px solid #ffd9e3;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 18px;
+      gap: 12px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 30% 30%, #ffffff, #FFCED2 55%, #FFBBC0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--accent-dark);
+      position: relative;
+      box-shadow: 0 4px 10px rgba(255, 174, 195, 0.6);
+    }
+
+    .logo-mark::after {
+      content: "♡";
+      position: absolute;
+      font-size: 10px;
+      bottom: 3px;
+      right: 4px;
+      opacity: 0.7;
+    }
+
+    .logo-text-main {
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: 0.04em;
+      text-transform: lowercase;
+    }
+
+    .logo-text-main span {
+      color: var(--accent);
+    }
+
+    .logo-text-sub {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      padding: 5px 9px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      background: transparent;
+    }
+
+    .nav-link.active {
+      border-color: #ffb4c3;
+      background: rgba(255, 206, 210, 0.6);
+    }
+
+    .search-box {
+      position: relative;
+      max-width: 210px;
+      flex: 1;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 6px 10px 6px 24px;
+      border-radius: 999px;
+      border: 1px solid #ffd9e3;
+      background: rgba(255,255,255,0.9);
+      font-size: 13px;
+      outline: none;
+    }
+
+    .search-box input::placeholder {
+      color: #c08c9c;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 7px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: #c08c9c;
+    }
+
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 1.4fr);
+      gap: 16px;
+      padding: 16px 18px 24px;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .header-inner {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .search-box {
+        max-width: 100%;
+      }
+    }
+
+    /* ===== LEFT COLUMN ===== */
+    .section {
+      margin-bottom: 18px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title-pill {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(255, 206, 210, 0.5);
+      color: var(--accent-dark);
+    }
+
+    .section-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .chip {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid #ffd6df;
+      background: rgba(255,255,255,0.8);
+      cursor: pointer;
+    }
+
+    .chip.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent-dark);
+    }
+
+    .card-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+    }
+
+    .comic-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 4px 12px rgba(255, 169, 189, 0.18);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+      position: relative;
+    }
+
+    .comic-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(255, 154, 184, 0.24);
+      border-color: #ffb0c1;
+    }
+
+    .comic-cover-wrap {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      background: linear-gradient(135deg, #ffd9e3, #ffeef2);
+      overflow: hidden;
+    }
+
+    .comic-cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .badge-18 {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: rgba(217,0,50,0.95);
+      color: #fff;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .badge-featured {
+      position: absolute;
+      bottom: 6px;
+      left: 6px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.45);
+      color: #fff;
+      font-size: 9px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .comic-body {
+      padding: 8px 9px 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .comic-title {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .comic-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .mini-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 3px;
+    }
+
+    .mini-tag {
+      font-size: 9px;
+      padding: 2px 5px;
+      border-radius: 999px;
+      background: #fff5f7;
+      border: 1px solid #ffd9e3;
+    }
+
+    /* ===== HERO / GIỚI THIỆU NHANH ===== */
+    .hero-card {
+      background: rgba(255,255,255,0.9);
+      border-radius: 18px;
+      padding: 10px 12px 12px;
+      border: 1px solid #ffd9e3;
+      box-shadow: 0 6px 16px rgba(255, 162, 192, 0.2);
+      margin-bottom: 10px;
+    }
+
+    .hero-topline {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .hero-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .hero-highlight {
+      color: var(--accent-dark);
+    }
+
+    .hero-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .hero-links {
+      font-size: 11px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .hero-link-pill {
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #fff5f7;
+      border: 1px solid #ffd6df;
+    }
+
+    /* ===== STORY DETAIL ===== */
+    .detail-panel {
+      margin-top: 14px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 18px;
+      padding: 12px 12px 14px;
+      border: 1px solid #ffd9e3;
+      box-shadow: 0 6px 16px rgba(255, 162, 192, 0.2);
+    }
+
+    .detail-header {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .detail-cover-wrap {
+      width: 90px;
+      aspect-ratio: 3 / 4;
+      border-radius: 10px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ffd9e3, #ffeef2);
+      position: relative;
+    }
+
+    .detail-cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .watermark-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .watermark-overlay::after {
+      content: "thegioihu.com • không re-up";
+      position: absolute;
+      inset: 20%;
+      transform: rotate(-28deg);
+      font-size: 14px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.35);
+      opacity: 0.7;
+    }
+
+    .detail-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .detail-title-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .detail-title {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .detail-group-link {
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #fff5f7;
+      border: 1px solid #ffd9e3;
+      cursor: pointer;
+    }
+
+    .detail-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .detail-meta-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .detail-actions {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 6px 10px;
+      font-size: 12px;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #ffb3c5;
+      color: var(--accent-dark);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding-inline: 0;
+    }
+
+    .detail-tags {
+      margin-top: 8px;
+    }
+
+    .detail-tags-title {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .detail-tags-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .detail-tag {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #fff5f7;
+      border: 1px solid #ffd6df;
+    }
+
+    .detail-related {
+      margin-top: 10px;
+      border-top: 1px dashed #ffd6df;
+      padding-top: 8px;
+    }
+
+    .related-title {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .related-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .related-item {
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #fff5f7;
+      border: 1px solid #ffd6df;
+      cursor: pointer;
+    }
+
+    /* ===== RIGHT COLUMN: TAGS & GROUP & PY ===== */
+    .side-card {
+      background: rgba(255,255,255,0.94);
+      border-radius: 18px;
+      padding: 10px 11px 12px;
+      border: 1px solid #ffd9e3;
+      box-shadow: 0 4px 12px rgba(255, 162, 192, 0.18);
+      margin-bottom: 10px;
+    }
+
+    .side-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .side-card-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .group-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .group-card {
+      border-radius: 12px;
+      padding: 7px 8px;
+      border: 1px solid #ffd6df;
+      background: #fffafd;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .group-name {
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .group-meta {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .featured-mini-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .featured-mini-item {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .featured-thumb {
+      width: 34px;
+      height: 44px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #ffd9e3, #ffeef2);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .featured-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .featured-info-title {
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .featured-info-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .py-about-text {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .py-links {
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .py-link {
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid #ffd6df;
+      background: #fff5f7;
+      display: inline-block;
+      margin-top: 2px;
+    }
+
+    /* ===== MODAL: GROUP DETAIL ===== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 40;
+      padding: 16px;
+    }
+
+    .modal {
+      max-width: 420px;
+      width: 100%;
+      background: #fff9fb;
+      border-radius: 18px;
+      padding: 12px 14px 14px;
+      border: 1px solid #ffd6df;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+      font-size: 12px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+
+    .modal-title {
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .modal-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .modal-close {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .modal-section-title {
+      font-weight: 600;
+      margin-top: 6px;
+      margin-bottom: 3px;
+      font-size: 12px;
+    }
+
+    .modal-list {
+      margin-left: 12px;
+      margin-top: 3px;
+    }
+
+    .modal-list li {
+      margin-bottom: 2px;
+    }
+
+    footer {
+      padding: 10px 18px 16px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    footer span {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    /* ===== READER MODAL ===== */
+    .reader-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 45;
+      padding: 10px;
+    }
+
+    .reader-shell {
+      max-width: 960px;
+      width: 100%;
+      max-height: 100%;
+      background: #020617;
+      border-radius: 16px;
+      border: 1px solid #ffb3c5;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .reader-header {
+      padding: 6px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #ffe4ee;
+      font-size: 12px;
+      background: linear-gradient(to right, #3b0f23, #1f1020);
+    }
+
+    .reader-title {
+      font-weight: 600;
+    }
+
+.reader-main {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background: radial-gradient(circle at top, #1f1020, #020617);
+}
+
+/* Container chứa tất cả các trang */
+#readerPages {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* Mỗi trang truyện */
+.reader-img-wrap {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+/* Ảnh full-width, cuộn dọc */
+.reader-img {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  border-radius: 12px;
+  background: #000;
+  display: block;
+}
+
+
+    .reader-img-watermark {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .reader-img-watermark::after {
+      content: "thegioihu.com • nhóm dịch";
+      position: absolute;
+      inset: 20%;
+      transform: rotate(-28deg);
+      font-size: 16px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+    }
+
+    .reader-footer {
+      padding: 6px 10px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0b0c16;
+      color: #d1d5db;
+      font-size: 11px;
+    }
+
+    .reader-controls {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .reader-btn {
+      border-radius: 999px;
+      border: 1px solid #ffb4c8;
+      background: transparent;
+      color: #ffe4ef;
+      padding: 4px 8px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .reader-btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    .reader-close {
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: #e5e7eb;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    /* Disable right click on images */
+    img {
+      -webkit-user-drag: none;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- PASSWORD GATE -->
+  <div id="gate" class="gate-backdrop">
+    <div class="gate-box">
+      <div class="gate-logo">
+        <div class="gate-logo-mark">胡</div>
+        <div>
+          thegioi<span>hu</span>.com
+        </div>
+      </div>
+      <div class="gate-subtitle">Không gian đọc boy love dành cho hủ đã đủ 18+.</div>
+      <div class="age-badge">
+        🔞 18+ only
+      </div>
+      <form id="gateForm" class="gate-form">
+        <label for="gatePassword">Mật khẩu vào nhà</label>
+        <input id="gatePassword" type="password" class="gate-input" placeholder="Nhập mật khẩu..." />
+        <button type="submit" class="gate-btn">Mở cổng thế giới hủ</button>
+        <div id="gateError" class="gate-error"></div>
+      </form>
+      <div class="gate-note">
+        Lưu ý: đây chỉ là lớp bảo vệ cơ bản cho người dùng thông thường.  
+        Hãy tuân thủ luật nước bạn về nội dung 18+.
+      </div>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="app" class="app-shell" style="display:none">
+    <header>
+      <div class="header-inner">
+        <div class="logo">
+          <div class="logo-mark">胡</div>
+          <div>
+            <div class="logo-text-main">thegioi<span>hu</span>.com</div>
+            <div class="logo-text-sub">boy love • shounen ai • yaoi</div>
+          </div>
+        </div>
+
+        <nav>
+          <button class="nav-link active" data-scroll="top">Trang chủ</button>
+          <button class="nav-link" data-scroll="genres">Thể loại</button>
+          <button class="nav-link" data-scroll="groups">Nhóm dịch</button>
+          <button class="nav-link" data-scroll="featured">Truyện nổi bật</button>
+        </nav>
+
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input id="searchInput" type="text" placeholder="Tìm truyện / tag / nhóm / Py Danmei..." />
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- LEFT COLUMN -->
+      <section>
+        <!-- HERO / GIỚI THIỆU -->
+        <div class="hero-card" id="top">
+          <div class="hero-topline">welcome to</div>
+          <div class="hero-title">
+            <span class="hero-highlight">Thế giới hủ</span>
+          </div>
+          <div class="hero-text" style="font-weight:700; color:#e4557a; margin-top:6px;">
+            THẬP NIỆM THÀNH MA — NHẤT NIỆM HÓA HỦ
+          </div>
+          <div class="hero-text">
+            Nơi lưu giữ các bản dịch boy love / shounen ai / yaoi,  
+            từ những câu chuyện ngọt ngào đến những câu chuyện… hơi nặng đô một chút.  
+            Vui lòng tôn trọng công sức nhóm dịch và đừng re-up khi chưa xin phép nhé.
+          </div>
+          <div class="hero-links">
+            <span class="hero-link-pill">📖 pydanmei.wordpress.com (đã archive)</span>
+            <span class="hero-link-pill">💗 fb.com/pydanmei</span>
+          </div>
+        </div>
+
+        <!-- Featured -->
+        <div class="section" id="featured">
+          <div class="section-header">
+            <div class="section-title">
+              Truyện nổi bật
+              <span class="section-title-pill">Tiêu biểu của Py</span>
+            </div>
+          </div>
+          <div id="featuredList" class="card-list"></div>
+        </div>
+
+        <!-- All comics + filter -->
+        <div class="section" id="genres">
+          <div class="section-header">
+            <div>
+              <div class="section-title">
+                Tất cả truyện
+              </div>
+              <div class="section-subtitle">
+                Lọc theo thể loại & tag. Một số truyện 18+ nặng bạn có thể tự thêm sau trong file.
+              </div>
+            </div>
+          </div>
+
+          <div class="chips" id="genreChips"></div>
+          <div class="chips" id="tagChips" style="margin-top:4px;"></div>
+
+          <div id="comicList" class="card-list" style="margin-top:8px;"></div>
+
+          <div id="storyDetailContainer"></div>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN -->
+      <aside>
+        <div class="side-card">
+          <div class="side-card-title">Tag cơ bản & 18+</div>
+          <div class="side-card-sub">Click để lọc nhanh truyện theo tag.</div>
+          <div id="sideTagChips" class="chips"></div>
+        </div>
+
+        <div class="side-card" id="groups">
+          <div class="side-card-title">Nhóm dịch</div>
+          <div class="side-card-sub">Thông tin nhóm chính và các nhóm khách mời.</div>
+          <div id="groupList" class="group-list"></div>
+        </div>
+
+        <div class="side-card">
+          <div class="side-card-title">Truyện tiêu biểu</div>
+          <div class="side-card-sub">Một vài cái tên đại diện cho gu hủ nhà mình.</div>
+          <div id="sideFeaturedList" class="featured-mini-list"></div>
+        </div>
+
+        <div class="side-card">
+          <div class="side-card-title">Về Py Danmei</div>
+          <div class="py-about-text">
+            Py là người đứng sau <b>thegioihu.com</b> và <b>Py Danmei</b>,  
+            từng hoạt động tại pydanmei.wordpress.com với nhiều dự án BL/yaoi đa dạng.
+          </div>
+          <div class="py-links">
+            <div>Liên hệ & theo dõi:</div>
+            <a href="https://pydanmei.wordpress.com" target="_blank" class="py-link">🌐 pydanmei.wordpress.com (đã xóa/đóng, để làm kỷ niệm)</a>
+            <a href="https://www.facebook.com/pydanmei" target="_blank" class="py-link">💗 Facebook: @pydanmei</a>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+  <div style="margin-bottom:4px; font-weight:700; color:#e4557a;">
+    THẬP NIỆM THÀNH MA — NHẤT NIỆM HÓA HỦ
+  </div>
+  © <span id="year"></span> thegioihu — Thế giới hủ | Vui lòng không re-up khi chưa có sự cho phép nhóm dịch.
+</footer>
+
+  </div>
+
+  <!-- GROUP MODAL -->
+  <div id="groupModalBackdrop" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span id="groupModalName"></span>
+          <span id="groupModalSince" class="modal-sub"></span>
+        </div>
+        <button class="modal-close" id="groupModalClose">✕</button>
+      </div>
+      <div>
+        <div class="modal-section-title">Châm ngôn</div>
+        <div id="groupModalMotto"></div>
+
+        <div class="modal-section-title">Giới thiệu</div>
+        <div id="groupModalAbout"></div>
+
+        <div class="modal-section-title">Thành viên</div>
+        <ul id="groupModalMembers" class="modal-list"></ul>
+
+        <div class="modal-section-title">Liên hệ</div>
+        <div id="groupModalLinks"></div>
+      </div>
+    </div>
+  </div>
+
+<!-- READER MODAL -->
+<div id="readerBackdrop" class="reader-backdrop">
+  <div class="reader-shell">
+    <div class="reader-header">
+      <div class="reader-title" id="readerTitle"></div>
+      <button class="reader-close" id="readerClose">✕</button>
+    </div>
+    <div class="reader-main">
+      <div id="readerPages"></div>
+    </div>
+    <div class="reader-footer">
+      <div id="readerPageInfo">Cuộn để xem tiếp • Esc để thoát</div>
+      <div class="reader-controls">
+        <!-- Giữ footer cho đẹp, không cần nút nữa -->
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script>
+    // ========= CẤU HÌNH CƠ BẢN =========
+    const SITE_PASSWORD = "hu18only"; // bạn nói ok rồi nên mình giữ nguyên
+
+    // Nhóm dịch
+   // Updated GROUPS array for your index.html
+const GROUPS = [
+  {
+    id: "py-danmei",
+    name: "Py Danmei",
+    founded: "Hoạt động từ trước 2020",
+    motto:
+      "Chúng tớ là một nhóm nhỏ các bạn (hủ) với niềm đam mê truyện boylove bất diệt. We love what we do, and we do it with passion.",
+    about:
+      "Py Danmei là nhóm dịch BL/yaoi được thành lập sau khi Py rời nhóm Ship of The Dream (blogtruyen.com, đã dừng hoạt động). Tại đây, Py tiếp tục dịch truyện vì đam mê và lưu giữ vì kỷ niệm, với nhiều dự án đa dạng từ dễ thương đến nặng đô.",
+    members: [
+      "Py — Boss, Translator, Editor, PR (từng thuộc nhóm Ship of The Dream)",
+      "Furu — Phó Boss, Editor",
+      "Color — E-Translator",
+      "Deer — E-Translator"
+    ],
+    links: [
+      { label: "Facebook", url: "https://www.facebook.com/pydanmei" },
+      { label: "Email", url: "mailto:pydanmeii@gmail.com" },
+      { label: "Trang WordPress cũ", url: "https://pydanmei.wordpress.com" }
+    ]
+  },
+  {
+    id: "guest-scans",
+    name: "Guest / Scan khác",
+    founded: "Các nhóm hợp tác",
+    motto: "Ghi credit đầy đủ cho từng nhóm.",
+    about:
+      "Dùng cho các dự án mà Py phối hợp hoặc dựa trên bản eng từ những nhóm khác (ví dụ, bạn có thể chỉnh sửa theo credit thật của từng truyện).",
+    members: ["Các nhóm eng / raw provider"],
+    links: []
+  }
+];
+
+
+// ===== THỂ LOẠI CHÍNH (3 LOẠI) + TAG =====
+
+// 3 genre chính
+const GENRE_INFO = {
+  "Shounen ai": {
+    label: "Shounen ai",
+    desc: "Tình cảm nhẹ nhàng, thiên về cảm xúc, rất ít hoặc không có cảnh 18+ rõ ràng."
+  },
+  "Yaoi": {
+    label: "Yaoi",
+    desc: "Tình cảm có yếu tố 16+–18+, có cảnh thân mật/giường chiếu ở mức vừa phải."
+  },
+  "Hard yaoi": {
+    label: "Hard yaoi",
+    desc: "Nội dung nặng, nhiều cảnh 18+, smut/H, có thể kèm kink, cưỡng ép, bạo lực..."
+  },
+  "Shounen": {
+    label: "Shounen",
+    desc: "Truyện không có yếu tố couple, chỉ dành đọc vui..."
+  },
+  "Shoujo": {
+    label: "Shoujo",
+    desc: "Truyện nam x nữ."
+  }
+};
+
+// Tag phụ (dùng cho lọc + hiển thị)
+const TAG_INFO = {
+  "School life": {
+    label: "School life / Học đường",
+    desc: "Bối cảnh chính là trường học, học sinh – sinh viên."
+  },
+  "Romance": {
+    label: "Romance / Lãng mạn",
+    desc: "Tập trung vào tình yêu, crush, tỏ tình, hẹn hò..."
+  },
+  "Comedy": {
+    label: "Comedy / Hài hước",
+    desc: "Nhiều tình huống vui vẻ, gây cười, không khí tương đối nhẹ nhàng."
+  },
+  "Drama": {
+    label: "Drama",
+    desc: "Cảm xúc nặng, có xung đột, tổn thương, dằn vặt."
+  },
+  "Psychological": {
+    label: "Psychological / Tâm lý",
+    desc: "Đào sâu tâm lý nhân vật, đôi khi có yếu tố méo mó / ám ảnh."
+  },
+  "Omegaverse": {
+    label: "Omegaverse / ABO",
+    desc: "Thế giới ABO (Alpha / Beta / Omega), thường có bản năng, phát tình, đánh dấu..."
+  },
+  "Oneshot": {
+    label: "Oneshot",
+    desc: "Truyện ngắn chỉ 1 chương hoặc 1 phần."
+  },
+  "Doujinshi": {
+    label: "Doujinshi",
+    desc: "Truyện fanmade dựa trên series có sẵn (anime/manga/game...)."
+  },
+  "18+": {
+    label: "18+",
+    desc: "Có nội dung người lớn, chỉ dành cho độc giả đã đủ 18 tuổi."
+  },
+  "Horror": {
+    label: "Horror / Kinh dị",
+    desc: "Có yếu tố ma quỷ, ghê rợn, bối cảnh đáng sợ."
+  },
+  "Dark": {
+    label: "Dark",
+    desc: "Không khí nặng, có bạo lực, cưỡng ép, ám ảnh."
+  },
+  "Hypnosis": {
+    label: "Hypnosis / Thôi miên",
+    desc: "Nhân vật bị tác động bởi thôi miên / mất kiểm soát."
+  },
+  "BDSM": {
+    label: "BDSM",
+    desc: "Có yếu tố bạo dâm, trói buộc, chơi kink."
+  },
+  "Bondage": {
+    label: "Bondage / Trói buộc",
+    desc: "Nhân vật bị trói, ràng buộc về mặt thể xác."
+  },
+  "Hardcore": {
+    label: "Hardcore",
+    desc: "Cảnh H rất nặng, không che đậy nhiều."
+  },
+  "Supernatural": {
+    label: "Siêu nhiên",
+    desc: "Có yếu tố ma, quỷ, thần linh, năng lực đặc biệt..."
+  },
+  "Fantasy": {
+    label: "Fantasy / Giả tưởng",
+    desc: "Thế giới hoặc yếu tố không có trong đời thực."
+  },
+  "Mystery": {
+    label: "Mystery / Bí ẩn",
+    desc: "Có điều tra, bí ẩn, cảm giác 'có gì đó không ổn'."
+  },
+  "Teacher": {
+    label: "Thầy trò",
+    desc: "Quan hệ giữa giáo viên – học sinh hoặc người hướng dẫn – học trò."
+  },
+  "Mature": {
+    label: "Mature",
+    desc: "Không khí người lớn, nội dung chín chắn, đôi khi buồn."
+  },
+  "Short Story": {
+    label: "Truyện ngắn",
+    desc: "Truyện ngắn ít chương, đọc nhanh."
+  },
+  "Animal Characteristic": {
+    label: "Tai thú / Đặc điểm động vật",
+    desc: "Nhân vật có tai, đuôi, đặc điểm giống động vật."
+  },
+  "Mindbreak": {
+    label: "mind-break",
+    desc: "Nhân vật bị tác động và không còn bình thường nữa"
+  }
+};
+
+// Danh sách để render chips
+const GENRES = Object.keys(GENRE_INFO);
+const TAGS = Object.keys(TAG_INFO);
+
+// Một phần list truyện từ blog cũ của Py
+const COMICS = [
+  {
+    id: "chu-ac-quy-va-cau-be-ca-hat",
+    title: "Chú Ác Quỷ Và Cậu Bé Ca Hát",
+    originalTitle: "悪魔さんとお歌 / Akumasan To Outa",
+    author: "Im; Makoto Morishita",
+    cover: "images/chu-ac-quy-cover.jpg",
+    adult: false,
+    genre: "Shounen",
+    tags: ["Demon", "Comedy", "Music", "Heartwarming"],
+    groupId: "py-danmei",
+    updated: "2021-09-01",
+    status: "Đã hoàn thành",
+    summary:
+      "Hetappi-chan, cậu bé bị đuổi khỏi Thánh Ca Đoàn vì hát kém. Chú Ác Quỷ đến để giết cậu lại bất ngờ trở thành thầy dạy nhạc. Giữa đêm tối, một ác quỷ và một cậu bé lập nên mối quan hệ kỳ lạ nhưng đầy ấm áp quanh những bản thánh ca.",
+    relatedIds: ["giac-mo", "tinh-yeu-tham-lang"],
+    pages: [
+      "images/chu-ac-quy/1.jpg",
+      "images/chu-ac-quy/2.jpg",
+      "images/chu-ac-quy/3.jpg",
+      "images/chu-ac-quy/4.jpg"
+    ]
+  },
+  {
+    id: "cho-muc",
+    title: "Chó Mực",
+    originalTitle: "Black Dog / 黒い犬 / Kuroi Inu",
+    author: "KAMO",
+    cover: "images/cho-muc-cover.jpg",
+    adult: true,
+    genre: "Yaoi",
+    tags: ["Comedy", "School life", "Romance", "18+", "Manga"],
+    groupId: "py-danmei",
+    updated: "2022-06-22",
+    status: "Đã hoàn thành",
+    summary:
+      'Một câu chuyện dễ thương về Kei và "chú cún con" đặc biệt của cậu – vừa hài hước vừa ấm áp.',
+    relatedIds: ["tinh-yeu-tham-lang", "toi-khong-de-vut-mat-mua-xuan"],
+    pages: ["images/cho-muc/1.jpg", "images/cho-muc/2.jpg"]
+  },
+  {
+    id: "cung-dan-anh",
+    title: "Cùng Đàn Anh",
+    originalTitle: "With Senpai, Senpai, to.",
+    author: "Unknown",
+    cover: "images/cung-dan-anh-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["18+", "Dark", "Oneshot", "Rape", "NTR", "Mindbreak"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary: "Tất cả bắt đầu bằng một buổi gặp mặt…",
+    relatedIds: [],
+    pages: ["images/cung-dan-anh/1.jpg"]
+  },
+  {
+    id: "daiya-no-ace-dj-ngay-xui-xeo-cua-sawamura-eijun",
+    title: "Daiya no Ace dj – Ngày Xui Xẻo Của Sawamura Eijun",
+    originalTitle:
+      "Daiya no A | Ace of Diamond dj, Daiya no Ace dj – Aru hi no Sawamura Jun no sainan; Daiya no Ace dj – Sawamura Eijun’s Unfortunate Day",
+    author: "DigDug (Shippo)",
+    cover: "images/ngay-xui-xeo-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["Doujinshi", "18+", "Yaoi", "Drama", "Oneshot", "Rape"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary:
+      "Kazuya Miyuki x Eijun Sawamura. Ngày nọ, Eijun bỗng bị kẹt khi cố chui qua một khe tường…",
+    relatedIds: [],
+    pages: ["images/ngay-xui-xeo/1.jpg"]
+  },
+  {
+    id: "giac-mo",
+    title: "Giấc Mơ",
+    originalTitle: "ソムニア, Somnia",
+    author: "KURAKA Sui",
+    cover: "images/giac-mo-cover.png",
+    adult: true,
+    genre: "Yaoi",
+    tags: ["Drama", "Psychological", "Oneshot", "18+"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary:
+      "Một chàng trai mắc bệnh nặng, chẳng còn sống được bao lâu, đem lòng yêu vị bác sĩ của mình và muốn trao hết mọi thứ cho người ấy – dù luôn bị đối xử lạnh nhạt.",
+    relatedIds: [],
+    pages: ["images/giac-mo/1.jpg"]
+  },
+  {
+    id: "haga-muon-bi-can",
+    title: "Haga Muốn Bị Cắn",
+    originalTitle:
+      "羽賀くんは噛まれたい, Haga-kun wa Kamaretai, Quiero morder a Haga-kun",
+    author: "SAKISHITA Senmu",
+    cover: "images/haga-cover.jpg",
+    adult: true,
+    genre: "Yaoi",
+    tags: ["Omegaverse", "Comedy", "18+"],
+    groupId: "py-danmei",
+    updated: "2021-11-13",
+    status: "Đã hoàn thành",
+    summary:
+      'Câu chuyện về một anh chàng trông coi nhà giam và một tù nhân đầy bí ẩn, với rất nhiều tình huống dở khóc dở cười xoay quanh "những vết cắn".',
+    relatedIds: ["dam-chim-trong-duc-vong"],
+    pages: ["images/haga/1.jpg"]
+  },
+  {
+    id: "bup-be-cua-nguoi",
+    title: "Búp Bê Của Người",
+    originalTitle: "Dareka no Ningyou, The Doll of Another",
+    author: "Kume (Minakami)",
+    cover: "images/bup-be-cua-nguoi-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["Teacher", "Oneshot", "18+", "Rape"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary: "Em chính là búp bê của tôi…",
+    relatedIds: [],
+    pages: ["images/bup-be-cua-nguoi/1.jpg"]
+  },
+  {
+    id: "can-ho-ma",
+    title: "Căn Hộ Ma",
+    originalTitle: "Danshoku Rei no Sumu Apato",
+    author: "Chimple Island (Chimple Hotter)",
+    cover: "images/can-ho-ma-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["Horror", "18+", "Dark", "Oneshot", "Mindbreak", "Rape"],
+    groupId: "py-danmei",
+    updated: "2021-??-??",
+    status: "Đã hoàn thành",
+    summary:
+      "Một căn hộ nơi có một hồn ma nam cư ngụ, và những vị khách ghé qua đều phải trả giá theo những cách khác nhau.",
+    relatedIds: [],
+    pages: ["images/can-ho-ma/1.jpg"]
+  },
+  {
+    id: "summer-war-dj-thoi-mien-kazuma-kun",
+    title: "Summer War dj – Thôi Miên Kazuma-kun",
+    originalTitle: "Kazuma-kun o Saimin de Oyome-san ni Shimasu",
+    author: "Seki Sabato (Tsukuru)",
+    cover: "images/thoi-mien-kazuma-kun-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["Doujinshi", "Hypnosis", "18+", "Oneshot", "Rape"],
+    groupId: "py-danmei",
+    updated: "2021-??-??",
+    status: "Đã hoàn thành",
+    summary: "Kazuma-kun liên tục nhận được những email kì lạ...",
+    relatedIds: [],
+    pages: ["images/thoi-mien-kazuma-kun/1.jpg"]
+  },
+  {
+    id: "tinh-yeu-tham-lang",
+    title: "Tình Yêu Thầm Lặng",
+    originalTitle: "無口な想いは恋となる, Mukuchi na Omoi wa Koi to Naru",
+    author: "Edanaka",
+    cover: "images/tinh-yeu-tham-lang-cover.jpg",
+    adult: true,
+    genre: "Shounen ai",
+    tags: ["Romance", "School life"],
+    groupId: "py-danmei",
+    updated: "2021-10-30",
+    scanlator: "Pink Cherry Blossom Scans",
+    status: "Đã hoàn thành",
+    summary:
+      "Yuki trở nên trầm lặng sau một sự cố thời cấp hai. Kawai – cậu bạn luôn tỏa sáng giữa lớp – là người duy nhất kéo cậu ra khỏi vỏ ốc, và cũng là người khiến trái tim cậu rung động.",
+    relatedIds: ["cho-muc", "toi-se-khong-de-vut-mat-mua-xuan-cua-minh-dau"],
+    pages: ["images/tinh-yeu-tham-lang/1.jpg"]
+  },
+  {
+    id: "toi-se-khong-de-vut-mat-mua-xuan-cua-minh-dau",
+    title: "Tôi Sẽ Không Để Vụt Mất Mùa Xuân Của Mình Đâu!",
+    originalTitle: "俺のアオハルは渡さない, Ore no Aoharu wa Watasanai",
+    author: "KATOU Susu",
+    cover: "images/mua-xuan-cover.jpg",
+    adult: true,
+    genre: "Shounen ai",
+    tags: ["Comedy", "School life", "Romance", "Manga"],
+    groupId: "py-danmei",
+    updated: "2021-05-17",
+    status: "Đã hoàn thành",
+    summary:
+      "Subaru – hoàng tử ngầu lòi nhất trường – thực ra là một con nghiện truyện shoujo. Khi Jinnai, người bạn cũ và là người duy nhất biết bí mật đó, chuyển đến lớp, kế hoạch thanh xuân hoàn hảo của Subaru bắt đầu chệch hướng. “Tôi sẽ không để cậu phá hủy kế hoạch thanh xuân hoàn hảo của tôi đâu!”.\nNhưng vì một lí do nào đó, trái tim “thiếu nữ” của cậu lại không ngừng rung động khi ở bên Jinnai!",
+    relatedIds: ["tinh-yeu-tham-lang"],
+    pages: ["images/mua-xuan/1.jpg"]
+  },
+  {
+    id: "dam-chim-trong-duc-vong",
+    title: "Đắm Chìm Trong Dục Vọng",
+    originalTitle: "Ijiwaru na Tsukai no Netsu ni Oborete",
+    author: "Sakuraba Yurin",
+    cover: "images/dam-chim-cover.jpg",
+    adult: true,
+    genre: "Yaoi",
+    tags: ["Omegaverse", "18+", "Drama"],
+    groupId: "py-danmei",
+    updated: "2024-01-08",
+    status: "Đang tiến hành",
+    summary:
+      "Một câu chuyện ABO xoay quanh giao dịch, ràng buộc và ham muốn – nơi ranh giới giữa lựa chọn và ép buộc không còn rõ ràng.",
+    relatedIds: ["haga-muon-bi-can"],
+    pages: ["images/dam-chim/1.jpg"]
+  },
+  {
+    id: "anh-lua",
+    title: "Ánh Lửa",
+    originalTitle: "Fire",
+    author: "Kuromutu (Kuroda Mutu)",
+    cover: "images/anh-lua-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["BDSM", "Bondage", "Hardcore", "Oneshot", "18+"],
+    groupId: "py-danmei",
+    updated: "2021-09-27",
+    status: "Đã hoàn thành",
+    summary: "Vì em gái, tôi phải...",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "anh-lua-2",
+    title: "Ánh Lửa 2",
+    originalTitle: "Fire 2",
+    author: "Kuromutu (Kuroda Mutu)",
+    cover: "images/anh-lua-2-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["BDSM", "Bondage", "Hardcore", "Oneshot", "18+"],
+    groupId: "py-danmei",
+    updated: "2021-09-27",
+    status: "Đã hoàn thành",
+    summary: "Vì em gái, tôi phải...",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "free-ji-my-nhan-ngu-cua-tuong-lai",
+    title: "Free! dj – Mỹ Nhân Ngư Của Tương Lai",
+    originalTitle:
+      "Free! dj – Mermaid Future (人魚のミライ), Ningyo no Mirai",
+    author: "Oshidori torinet",
+    cover: "images/my-nhan-ngu-cover.jpg",
+    adult: false,
+    genre: "Shounen ai",
+    tags: ["Doujinshi", "Oneshot", "Supernatural"],
+    groupId: "py-danmei",
+    updated: "2021-05-13",
+    status: "Đã hoàn thành",
+    summary:
+      "Haru là một 'chàng tiên cá' và Rin cảm thấy điều đó thật tuyệt vời ♥",
+    relatedIds: [
+      "free-ji-cuc-cung",
+      "free-ji-ngay-he-ngay-dai",
+      "free-ji-cu-giu-lay-neu-cau-muon"
+    ],
+    pages: []
+  },
+  {
+    id: "free-ji-ngay-he-ngay-dai",
+    title: "Free! dj – Ngày Hè Ngây Dại",
+    originalTitle:
+      "Free! dj – Awkward Summer Love, Bukyou Natsukoi",
+    author: "ANCOCOCO/ Sakura Hitsuji",
+    cover: "images/ngay-he-ngay-dai-cover.jpg",
+    adult: false,
+    genre: "Shounen ai",
+    tags: ["Doujinshi", "Oneshot", "School life"],
+    groupId: "py-danmei",
+    updated: "2021-05-13",
+    status: "Đã hoàn thành",
+    summary: "Rin Matsuoka x Haruka Nanase ♥",
+    relatedIds: [
+      "free-ji-cu-giu-lay-neu-cau-muon",
+      "free-ji-my-nhan-ngu-cua-tuong-lai"
+    ],
+    pages: []
+  },
+  {
+    id: "free-ji-cuc-cung",
+    title: "Free! dj – Cục Cưng! Cục Cưng! Cục Cưng!",
+    originalTitle: "Free! dj – Baby Baby Baby",
+    author: "phenomena (AKIHOSHI Umi)",
+    cover: "images/cuc-cung-cover.jpg",
+    adult: false,
+    genre: "Shounen ai",
+    tags: ["Doujinshi", "Oneshot", "School life"],
+    groupId: "py-danmei",
+    updated: "2021-05-13",
+    status: "Đã hoàn thành",
+    summary: "Rin Matsuoka x Haruka Nanase ♥",
+    relatedIds: [
+      "free-ji-cu-giu-lay-neu-cau-muon",
+      "free-ji-my-nhan-ngu-cua-tuong-lai"
+    ],
+    pages: []
+  },
+  {
+    id: "free-ji-cu-giu-lay-neu-cau-muon",
+    title: "Free! dj – Cứ Giữ Lấy Nếu Cậu Muốn!",
+    originalTitle: "Free! dj – Be Jealous if You Want!",
+    author: "Nightlight",
+    cover: "images/cu-giu-lay-cover.jpg",
+    adult: false,
+    genre: "Shounen ai",
+    tags: ["Doujinshi", "Oneshot", "School life"],
+    groupId: "py-danmei",
+    updated: "2021-05-13",
+    status: "Đã hoàn thành",
+    summary: "♥",
+    relatedIds: ["free-ji-my-nhan-ngu-cua-tuong-lai"],
+    pages: []
+  },
+  {
+    id: "free-ji-bi-mat-trong-phong-tam",
+    title: "Free! dj – Bí Mật Trong Phòng Tắm",
+    originalTitle:
+      "Free! dj – Himitsu no Shower Room / Secret Shower Room",
+    author: "2bit",
+    cover: "images/bi-mat-trong-phong-tam-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["Doujinshi", "Oneshot", "School life"],
+    groupId: "py-danmei",
+    updated: "2021-05-13",
+    status: "Đã hoàn thành",
+    summary: "Rin Matsuoka x Haruka Nanase ♥",
+    relatedIds: [
+      "free-ji-cu-giu-lay-neu-cau-muon",
+      "free-ji-my-nhan-ngu-cua-tuong-lai"
+    ],
+    pages: []
+  },
+  {
+    id: "free-ji-phong-thay-do",
+    title: "Free! dj – Phòng Thay Đồ",
+    originalTitle:
+      "Free! dj – OSANANAJIMI TO SHICHAKUSHITSU NI IRU TO / When I Get into the Dressing Room with My Childhood Friends",
+    author: "Kenashi Ai! / Mimisuke",
+    cover: "images/phong-thay-do-cover.jpg",
+    adult: true,
+    genre: "Yaoi",
+    tags: ["Doujinshi", "Oneshot", "NP", "Comedy"],
+    groupId: "py-danmei",
+    updated: "2021-05-13",
+    status: "Đã hoàn thành",
+    summary:
+      "Makoto x Rin x Haruka. Câu chuyện về 3 chàng trai trong một phòng thử đồ… =)))))))) ♥",
+    relatedIds: [
+      "free-ji-cu-giu-lay-neu-cau-muon",
+      "free-ji-my-nhan-ngu-cua-tuong-lai"
+    ],
+    pages: []
+  },
+  {
+    id: "free-ji-phong-doi",
+    title: "Free! dj – Phòng Đôi",
+    originalTitle: "Free! dj – Room For Two, Futari Gurashi",
+    author: "Kenashi Ai! / Mimisuke",
+    cover: "images/phong-doi-cover.jpg",
+    adult: false,
+    genre: "Shounen ai",
+    tags: ["Doujinshi", "Oneshot", "NP"],
+    groupId: "py-danmei",
+    updated: "2021-05-13",
+    status: "Đã hoàn thành",
+    summary: "Rin Matsuoka x Haruka Nanase ♥",
+    relatedIds: [
+      "free-ji-cu-giu-lay-neu-cau-muon",
+      "free-ji-my-nhan-ngu-cua-tuong-lai"
+    ],
+    pages: []
+  },
+  {
+    id: "free-ji-mot-ngay-buon-cua-thieu-nien",
+    title: "Free! dj – Một Ngày Buồn Của Thiếu Niên",
+    originalTitle: "Free! dj – Seishun Melancholy One Day",
+    author: "Mitsumata / Mitsuko",
+    cover: "images/mot-ngay-buon-cover.jpg",
+    adult: false,
+    genre: "Shounen ai",
+    tags: ["Doujinshi", "Oneshot", "Romance"],
+    groupId: "py-danmei",
+    updated: "2021-05-13",
+    status: "Đã hoàn thành",
+    summary: "Uozumi x Minami ♥ Uozumi sau giải đấu cấp quận…",
+    relatedIds: [
+      "free-ji-cu-giu-lay-neu-cau-muon",
+      "free-ji-my-nhan-ngu-cua-tuong-lai"
+    ],
+    pages: []
+  },
+  {
+    id: "free-ji-yeu-them-lan-nua",
+    title: "Free! dj – Yêu Thêm Lần Nữa",
+    originalTitle: "Free! dj – One More Romance, Mou Ichido Koi wo Suru",
+    author: "Overrunner / Rihara",
+    cover: "images/yeu-them-lan-nua-cover.jpg",
+    adult: false,
+    genre: "Shounen ai",
+    tags: ["Doujinshi", "Oneshot", "School life", "Drama"],
+    groupId: "py-danmei",
+    updated: "2021-05-13",
+    status: "Đã hoàn thành",
+    summary: "Rin Matsuoka x Haruka Nanase ♥",
+    relatedIds: [
+      "free-ji-cu-giu-lay-neu-cau-muon",
+      "free-ji-my-nhan-ngu-cua-tuong-lai"
+    ],
+    pages: []
+  },
+  {
+    id: "super-danganronpa-2-trung-hoc-xuat-sac-kun",
+    title: "Super Danganronpa 2 dj – Trung Học Xuất Sắc-kun",
+    originalTitle:
+      "Super Danganronpa 2 dj - Buchi Oka Yobi Gakka-kun",
+    author: "Usamimi Syndrome (Erutasuku)",
+    cover: "images/trung-hoc-xuat-sac-kun-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["Doujinshi", "Fantasy", "Hypnosis", "18+", "NP"],
+    groupId: "py-danmei",
+    updated: "2021-11-15",
+    status: "Đã hoàn thành",
+    summary: "Quá trình khai phá tài năng của Hinata-kun...",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "daiya-no-ace-dj-loi-thi-tham",
+    title: "Daiya no Ace dj – Lời Thì Thầm",
+    originalTitle: "Diamond no Ace dj – Murmur, Ace of Diamond",
+    author: "VS (masa)",
+    cover: "images/loi-thi-tham-cover.jpg",
+    adult: false,
+    genre: "Shounen ai",
+    tags: ["Romance", "Doujinshi", "Oneshot"],
+    groupId: "py-danmei",
+    updated: "2021-12-01",
+    status: "Đã hoàn thành",
+    summary:
+      "Kazuya Miyuki x Eijun Sawamura. Một doujinshi nhẹ nhàng của Daiya no Ace, chủ yếu xoay quanh những khoảnh khắc tình cảm dịu dàng.",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "meo-yeu",
+    title: "Mèo Yêu",
+    originalTitle: "ネコ★また, Neko Mata",
+    author: "KAMON Saeko",
+    cover: "images/meo-yeu-cover.jpg",
+    adult: true,
+    genre: "Yaoi",
+    tags: ["Fantasy", "Mature", "Romance", "School life", "Supernatural"],
+    groupId: "py-danmei",
+    updated: "2021-05-17",
+    status: "Đã hoàn thành",
+    summary:
+      "Kimura, một chàng trai nhút nhát, được thầy nhờ dạy kèm cho Shouhei. Nhờ sự giúp đỡ của mèo Kuro, một đêm kì lạ đã thay đổi tất cả…",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "hac-giay",
+    title: "Hạc Giấy",
+    originalTitle: "IF",
+    author: "Unknown",
+    cover: "images/hac-giay-cover.jpg",
+    adult: false,
+    genre: "Shounen ai",
+    tags: ["Drama", "Doujinshi", "Oneshot"],
+    groupId: "py-danmei",
+    updated: "2021-01-01",
+    status: "Đã hoàn thành",
+    summary:
+      "Một đoản truyện đầy cảm xúc, mô tả một khả năng 'nếu như' giữa hai người con trai.",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "bi-thoi-mien-toi-tro-thanh-phu-nu-cua-thay",
+    title: "Bị Thôi Miên Tôi Trở Thành Phụ Nữ Của Thầy",
+    originalTitle:
+      "Mesuochi Saiminkyouiku, Degenerating into a Female Hypnotism Education",
+    author: "Usamimi Syndrome (Erutasuku)",
+    cover: "images/thanh-phu-nu-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["Hypnosis", "18+", "Hardcore", "Oneshot"],
+    groupId: "py-danmei",
+    updated: "2024-01-08",
+    status: "Đã hoàn thành",
+    summary:
+      "Một giáo viên đã phát minh ra app thôi miên để trị cậu học trò hư hỏng của mình… ❤",
+    relatedIds: [],
+    pages: ["images/thanh-phu-nu/1.jpg"]
+  },
+  {
+    id: "alpha-rac-roi",
+    title: "Alpha rắc rối",
+    originalTitle: "Alpha Komplex",
+    author: "Picricacid (Saiki Makiko)",
+    cover: "images/alpha-rac-roi-cover.jpg",
+    adult: true,
+    genre: "Shounen ai",
+    tags: ["Omegaverse", "Romance", "Oneshot"],
+    groupId: "py-danmei",
+    updated: "2024-01-08",
+    status: "Đã hoàn thành",
+    summary: "Tình cảm của một cặp Alpha sẽ như thế nào…?!",
+    relatedIds: ["alpha-rac-roi"],
+    pages: ["images/alpha-rac-roi/1.jpg"]
+  },
+  {
+    id: "hetalia-dj-ky-dieu-sau-cung",
+    title: "Hetalia dj – Kỳ Diệu Sau Cùng",
+    originalTitle: "Hetalia dj – Dead Loss Wonder | Dead Loss Wander",
+    author: "DELTA+8 (Mitaka)",
+    cover: "images/ky-dieu-sau-cung-cover.jpg",
+    adult: true,
+    genre: "Yaoi",
+    tags: ["Comedy", "Drama", "Oneshot", "Hardcore", "Doujinshi"],
+    groupId: "py-danmei",
+    updated: "2021-05-17",
+    status: "Đã hoàn thành",
+    summary:
+      "America x Pirate England (US x UK). Trên đường về thì bị bắt cóc…",
+    relatedIds: [],
+    pages: ["images/ky-dieu-sau-cung/1.jpg"]
+  },
+  {
+    id: "hoozuki-reitetsu-dj-ai-tinh-troi-buoc",
+    title: "Hoozuki no Reitetsu dj – Ái Tình Trói Buộc",
+    originalTitle:
+      "Hoozuki no Reitetsu dj - Aigan Shinjuu / Hoozuki no Reitetsu",
+    author: "Contrast High (Kourimiya)",
+    cover: "images/ai-tinh-troi-buoc-cover.jpg",
+    adult: true,
+    genre: "Yaoi",
+    tags: ["Oneshot", "Doujinshi"],
+    groupId: "py-danmei",
+    updated: "2021-05-17",
+    status: "Đã hoàn thành",
+    summary:
+      "Hoozuki x Hakutaku. Chuyện về một chàng thần thú và tiểu quỷ…..",
+    relatedIds: [],
+    pages: ["images/ai-tinh-troi-buoc/1.jpg"]
+  },
+  {
+    id: "hypnosis-mic-dj-dap-an",
+    title: "Hypnosis Mic dj – Đáp Án",
+    originalTitle: "Hypnosis Mic dj – Answer",
+    author: "W.R.S (Takiyoshi)",
+    cover: "images/dap-an-cover.jpg",
+    adult: true,
+    genre: "Yaoi",
+    tags: ["Oneshot", "Omegaverse", "Doujinshi", "Hardcore"],
+    groupId: "py-danmei",
+    updated: "2024-01-08",
+    status: "Đã hoàn thành",
+    summary: "Sự hiểu lầm bắt đầu bằng một trò đùa...",
+    relatedIds: [],
+    pages: ["images/dap-an/1.jpg"]
+  },
+  {
+    id: "le-vat-cua-ac-than",
+    title: "Lễ Vật Của Ác Thần",
+    originalTitle:
+      "Jashin no Ikenie Ani Omoi no Otouto Hen; Offering to the Evil God - Little Brother's Affection for Big Brother",
+    author: "Usamimi Syndrome (Erutasuku)",
+    cover: "images/le-vat-cua-ac-than-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["Oneshot", "Hardcore", "Rape", "Mindbreak", "18+", "HET"],
+    groupId: "py-danmei",
+    updated: "2024-01-08",
+    status: "Đã hoàn thành",
+    summary: "Em trai nhỏ muốn cứu anh trai nhưng...",
+    relatedIds: ["hypnosis-mic-dj-dap-an"],
+    pages: []
+  },
+  {
+    id: "yowamushi-pedal-dj-am-thanh-vun-vo",
+    title: "Yowamushi Pedal dj – Âm Thanh Vụn Vỡ",
+    originalTitle: "Yowamushi Pedal dj – Âm Thanh Vụn Vỡ",
+    author: "Hone Shaburi Tei (Nakaore poukubittsu)",
+    cover: "images/am-thanh-vun-vo-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["Doujinshi", "18+", "Oneshot", "Rape", "NP", "Somnophilia"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary:
+      "Không nên mất cảnh giác, kể cả trong lúc ngủ… vì bạn không biết điều gì sẽ xảy đến với mình đâu...",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "phuong-thuc-thoi-mien",
+    title: "Phương Thức Thôi Miên",
+    originalTitle: "催眠取取; さいみんさくしゆ; Saimin Sakushu",
+    author: "Sioyaki Ayu",
+    cover: "images/phuong-thuc-thoi-mien-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["18+", "Oneshot", "Rape", "Hypnosis", "Somnophilia"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary: "Tưởng là…",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "phong-vip",
+    title: "Phòng VIP",
+    originalTitle:
+      "VIP Room (Otokonoko Heaven’s Door 1) / Phòng VIP (Cánh Cửa Thiên Đường Của Đàn Ông 1)",
+    author: "MTNO",
+    cover: "images/phong-vip-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["18+", "Oneshot", "Rape", "NP"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary: "Căn phòng bí mật của đàn ông...",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "bua-tiec-chao-mung",
+    title: "Bữa Tiệc Chào Mừng",
+    originalTitle: "Buta ga Itta Kyoushitsu",
+    author: "Service Boy (Hontoku)",
+    cover: "images/bua-tiec-chao-mung-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["18+", "Oneshot", "Rape", "NP"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary: "Bữa tiệc chào mừng học sinh mới...",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "cai-tao-playboy",
+    title: "Cải Tạo Playboy",
+    originalTitle:
+      "Otokonoko VS Yarichin ~Yarisute Shippai! Mesuinu Choukyou Taikyuusen!",
+    author: "Yamamoto Manami",
+    cover: "images/cai-tao-playboy-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["18+", "Oneshot", "Rape", "Hardcore", "Mindbreak"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary:
+      "Câu chuyện về một cậu Playboy với sở thích hại đời gái nhà lành cuối cùng cũng tìm được chân lý của đời mình…",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "chuyen-buyt-muon",
+    title: "Chuyến Buýt Muộn",
+    originalTitle: "Yokujou Non-stop Bus",
+    author: "Kume (Minakami Riku)",
+    cover: "images/chuyen-buyt-muon-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["18+", "Oneshot", "Rape"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary:
+      "Phải cẩn thận khi đi một mình trong một chuyến tàu/buýt muộn…",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "con-doi",
+    title: "Cơn Đói",
+    originalTitle: "Harapeko Saimin",
+    author: "Akaeboshi (Binto)",
+    cover: "images/con-doi-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["18+", "Oneshot", "Rape", "Hypnosis"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary: "Được cậu bạn cùng lớp mời đến nhà ăn pizza…",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "dich-vu-9900-won",
+    title: "“Dịch Vụ” 9900 Won",
+    originalTitle: "All for 9900 Won",
+    author: "Yayameme / Xiang",
+    cover: "images/dich-vu-9900-won-cover.jpg",
+    adult: true,
+    genre: "Yaoi",
+    tags: ["18+", "Manhwa", "Rape"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary:
+      "Sau khi tìm được công việc thích hợp, Myeongwoo được phân làm nhân viên tiếp thị quảng cáo sản phẩm của công ty. Nhưng trong lúc làm việc cậu không may bị một tên tự cao tự đại từ một công ty có tầm ảnh hưởng bắt gặp, hắn ta đã thẳng thừng bác bỏ sản phẩm được cho là “máy ảnh chất lượng cao của Trung Quốc” của cậu! Sau khi quá chén, bằng một cách vi diệu nào đó cậu lại tỉnh dậy tại nhà cái tên kiêu ngạo kia và phát hiện bí mật của hắn... Liệu chuyện này sẽ dẫn tới điều gì đây…",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "daiya-no-ace-dj-khe-uoc-halloween",
+    title: "Daiya no Ace dj – Khế Ước Halloween",
+    originalTitle:
+      "Daiya no A / Ace of Diamond dj / Daiya no Ace dj – Halloween Engage",
+    author: "DigDug (Shippo)",
+    cover: "images/khe-uoc-halloween-cover.jpg",
+    adult: true,
+    genre: "Yaoi",
+    tags: ["Doujinshi", "18+", "Oneshot", "Hypnosis", "Fantasy", "Demon", "Hardcore"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary:
+      "Kazuya Miyuki x Eijun Sawamura. Dụ ác quỷ vào tròng (hay bị ác quỷ lừa?)…",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "daiya-no-ace-dj-meo-con-cua-toi",
+    title: "Daiya no Ace dj – Mèo Con Của Tôi",
+    originalTitle: "Ace of Diamond / Daiya no Ace dj – my own cat",
+    author: "DigDug (Shippo)",
+    cover: "images/meo-con-cua-toi-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["Doujinshi", "18+", "Oneshot", "Rape", "Mindbreak", "Hardcore"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary: "Kazuya Miyuki x Eijun Sawamura. Em chính là mèo con của anh… <3",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "lieu-phap-thoi-mien",
+    title: "Liệu Pháp Thôi Miên",
+    originalTitle: "Suyasuya Hypnotherapy",
+    author: "DigDug (Shippo)",
+    cover: "images/lieu-phap-thoi-mien-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["Hypnosis", "18+", "Oneshot", "Rape", "Hardcore"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary: "Câu chuyện về một cậu bé bị mất ngủ…",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "boku-dake-ga-inai-machi-dj-thoi-mien-than-ky",
+    title: "Boku Dake ga Inai Machi dj – Thôi Miên Thần Kỳ",
+    originalTitle:
+      "Boku Dake ga Inai Machi dj – Hypno Wonder Land",
+    author: "Akaeboshi (Binto)",
+    cover: "images/thoi-mien-than-ky-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["Hypnosis", "18+", "Oneshot", "Doujinshi", "Mindbreak", "Rape"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary: "Bắt cóc / cầm tù play… <3",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "nguoi-ban-trai-dac-biet",
+    title: "Người Bạn Trai Đặc Biệt",
+    originalTitle:
+      "他的特别男友 / 彼の特別な彼 / His Special Boyfriend / Kare no Tokubetsu na Kare",
+    author: "Narusaka Rin",
+    cover: "images/nguoi-ban-trai-dac-biet-cover.jpg",
+    adult: false,
+    genre: "Yaoi",
+    tags: ["Comedy", "Romance", "School life"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary:
+      "Mặc dù rất đẹp trai, tất cả những gì Hiraoka Tatsuya muốn là một cuộc sống bình thường và yên bình. Nhưng rồi, cuộc sống của cậu lại bị đảo lộn bởi học sinh chuyển trường, Suruga Daichi, một diễn viên nổi tiếng. Là Chủ tịch hội học sinh, cậu được phân công “chăm sóc” anh ta. Điều gì sẽ xảy ra đây…..?",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "toi-da-bien-mat-khong-bao-gio-tro-ve",
+    title: "Tôi Đã Biến Mất, Không Bao Giờ Trở Về",
+    originalTitle: "Kieta Boku wa Kaerenai / I Disappeared Never to Return",
+    author: "Goya",
+    cover: "images/toi-da-bien-mat-cover.jpg",
+    adult: true,
+    genre: "Hard yaoi",
+    tags: ["Rape", "Hypnosis", "Mindbreak", "18+", "Oneshot", "Hardcore"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary: "Công nghệ hiện đại có thể làm rất nhiều thứ…",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "tinh-yeu-cam-ky",
+    title: "Tình Yêu Cấm Kỵ",
+    originalTitle: "秘恋 / Hikoi / Hiren / Immoral Love",
+    author: "COSMIQ (Mio Junta) / 三尾じゅん太",
+    cover: "images/tinh-yeu-cam-ky-cover.jpg",
+    adult: false,
+    genre: "Yaoi",
+    tags: ["Brother", "Drama"],
+    groupId: "py-danmei",
+    updated: "2021-12-23",
+    status: "Đã hoàn thành",
+    summary:
+      "Khi Touya có giấc mộng xuân đầu tiên, Naoto quyết định dạy em trai mình cách tự sướng và bắn. Không ngờ rằng, hành động không hề trong sáng này lại dẫn đến một điều khác… Nhìn thấy người anh của mình “tự sướng” đã khiến cậu bé Touya nảy sinh ham muốn với anh trai, biết rằng đó là một điều cấm kỵ, cậu chỉ dám cất giữ nó ở trong tim. Đến một ngày, cậu phát hiện người anh Naoto của mình thế nhưng cũng có một bí mật chôn giấu, điều này đã phơi bày tất cả. Bây giờ, cả hai phải làm thế nào để gìn giữ sự bình yên của gia đình đây…?",
+    relatedIds: [],
+    pages: []
+  },
+  {
+    id: "ten-khong-dau",
+    title: "Tên truyện tiếng Việt",
+    originalTitle: "Tên gốc / Romaji / Eng",
+    author: "Tên tác giả",
+    cover: "images/ten-khong-dau/cover.jpg",
+    adult: true,
+    genre: "Yaoi",
+    tags: ["School life", "Romance", "Oneshot", "18+", "Omegaverse"],
+    groupId: "py-danmei", // hoặc "Nhóm ẩn danh"
+    updated: "2025-01-01",
+    status: "Đã hoàn thành",
+    summary: "Vài dòng giới thiệu về truyện...",
+    relatedIds: ["id-truyen-khac-neu-muon-gioi-thieu"],
+    pages: [
+      "images/ten-khong-dau/1.jpg",
+      "images/ten-khong-dau/2.jpg"
+    ]
+  }
+];
+
+
+
+    // ========= PASSWORD GATE LOGIC =========
+    const gateEl = document.getElementById("gate");
+    const appEl = document.getElementById("app");
+    const gateForm = document.getElementById("gateForm");
+    const gatePasswordInput = document.getElementById("gatePassword");
+    const gateError = document.getElementById("gateError");
+
+    function unlockSite() {
+      gateEl.style.display = "none";
+      appEl.style.display = "flex";
+      localStorage.setItem("thegioihu_unlocked", "1");
+    }
+
+    if (localStorage.getItem("thegioihu_unlocked") === "1") {
+      unlockSite();
+    }
+
+    gateForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const val = gatePasswordInput.value.trim();
+      if (val === SITE_PASSWORD) {
+        unlockSite();
+      } else {
+        gateError.textContent = "Mật khẩu sai rồi, thử lại nha~";
+      }
+    });
+
+    // ========= HELPERS =========
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      if (isNaN(d)) return "";
+      return d.toLocaleDateString("vi-VN");
+    }
+
+    function findGroupById(id) {
+      return GROUPS.find(g => g.id === id) || null;
+    }
+
+    function findComicById(id) {
+      return COMICS.find(c => c.id === id) || null;
+    }
+
+    // ========= RENDER GENRES & TAGS =========
+    const genreChipsEl = document.getElementById("genreChips");
+    const tagChipsEl = document.getElementById("tagChips");
+    const sideTagChipsEl = document.getElementById("sideTagChips");
+
+    let activeGenre = null;
+    let activeTag = null;
+
+function renderChips() {
+  // Genre chips
+  genreChipsEl.innerHTML = "";
+  GENRES.forEach(g => {
+    const info = GENRE_INFO[g] || {};
+    const chip = document.createElement("button");
+    chip.className = "chip" + (activeGenre === g ? " active" : "");
+    chip.textContent = info.label || g;
+    chip.title = info.desc || "";
+    chip.onclick = () => {
+      activeGenre = activeGenre === g ? null : g;
+      renderChips();
+      renderComics();
+      const introEl = document.getElementById("genreIntro");
+      if (introEl && activeGenre) {
+        const count = filterComics().length;
+        introEl.textContent =
+          (GENRE_INFO[activeGenre]?.desc || "") +
+          (count ? ` • Có ${count} truyện thuộc thể loại này.` : "");
+      } else if (introEl) {
+        introEl.textContent = "";
+      }
+    };
+    genreChipsEl.appendChild(chip);
+  });
+
+  // Tag chips dưới phần "Tất cả truyện"
+  tagChipsEl.innerHTML = "";
+  TAGS.forEach(t => {
+    const info = TAG_INFO[t] || {};
+    const chip = document.createElement("button");
+    chip.className = "chip" + (activeTag === t ? " active" : "");
+    chip.textContent = info.label || t;
+    chip.title = info.desc || "";
+    chip.onclick = () => {
+      activeTag = activeTag === t ? null : t;
+      renderChips();
+      renderComics();
+    };
+    tagChipsEl.appendChild(chip);
+  });
+
+  // Tag ở sidebar
+  sideTagChipsEl.innerHTML = "";
+  TAGS.forEach(t => {
+    const info = TAG_INFO[t] || {};
+    const chip = document.createElement("button");
+    chip.className = "chip" + (activeTag === t ? " active" : "");
+    chip.textContent = info.label || t;
+    chip.title = info.desc || "";
+    chip.onclick = () => {
+      activeTag = activeTag === t ? null : t;
+      renderChips();
+      renderComics();
+      document.getElementById("genres").scrollIntoView({ behavior: "smooth" });
+    };
+    sideTagChipsEl.appendChild(chip);
+  });
+}
+
+    // ========= RENDER COMICS =========
+    const comicListEl = document.getElementById("comicList");
+    const featuredListEl = document.getElementById("featuredList");
+    const sideFeaturedListEl = document.getElementById("sideFeaturedList");
+    const storyDetailContainer = document.getElementById("storyDetailContainer");
+    const searchInput = document.getElementById("searchInput");
+
+    function filterComics() {
+      const q = (searchInput.value || "").toLowerCase().trim();
+      return COMICS.filter(c => {
+        if (activeGenre && c.genre !== activeGenre) return false;
+        if (activeTag && !c.tags.includes(activeTag)) return false;
+        if (q) {
+          const g = findGroupById(c.groupId);
+          const inText =
+            c.title.toLowerCase().includes(q) ||
+            (c.originalTitle || "").toLowerCase().includes(q) ||
+            c.summary.toLowerCase().includes(q) ||
+            c.tags.some(t => t.toLowerCase().includes(q));
+          const inGroup = g && g.name.toLowerCase().includes(q);
+          const inPy = "py danmei".includes(q) && g && g.id === "py-danmei";
+          if (!inText && !inGroup && !inPy) return false;
+        }
+        return true;
+      });
+    }
+
+    function createComicCard(comic, isFeatured) {
+      const group = findGroupById(comic.groupId);
+      const card = document.createElement("article");
+      card.className = "comic-card";
+      card.onclick = () => openStoryDetail(comic.id);
+
+      card.innerHTML = `
+        <div class="comic-cover-wrap">
+          <img src="${comic.cover}" alt="${comic.title}" class="comic-cover" />
+          ${comic.adult ? '<div class="badge-18">18+ yaoi</div>' : ""}
+          ${isFeatured ? '<div class="badge-featured">✨ Nổi bật</div>' : ""}
+        </div>
+        <div class="comic-body">
+          <h3 class="comic-title">${comic.title}</h3>
+          <div class="comic-meta">
+            ${comic.genre} • ${group ? group.name : "Nhóm ẩn danh"}<br>
+            Cập nhật: ${formatDate(comic.updated)} • ${comic.status}
+          </div>
+          <div class="mini-tags">
+            ${comic.tags.slice(0, 3).map(t => `<span class="mini-tag">${t}</span>`).join("")}
+          </div>
+        </div>
+      `;
+      return card;
+    }
+
+    function renderComics() {
+      const list = filterComics();
+      comicListEl.innerHTML = "";
+      list.forEach(c => {
+        comicListEl.appendChild(createComicCard(c, false));
+      });
+
+      if (list.length === 0) {
+        comicListEl.innerHTML = "<div style='font-size:12px;color:#7a5a6a;'>Không tìm thấy truyện phù hợp với bộ lọc hiện tại.</div>";
+      }
+    }
+
+    function renderFeatured() {
+      const featured = COMICS.slice(0, 3); // 3 truyện tiêu biểu
+      featuredListEl.innerHTML = "";
+      featured.forEach(c => {
+        featuredListEl.appendChild(createComicCard(c, true));
+      });
+
+      sideFeaturedListEl.innerHTML = "";
+      featured.forEach(c => {
+        const group = findGroupById(c.groupId);
+        const item = document.createElement("div");
+        item.className = "featured-mini-item";
+        item.onclick = () => {
+          openStoryDetail(c.id);
+          document.getElementById("genres").scrollIntoView({ behavior: "smooth" });
+        };
+        item.innerHTML = `
+          <div class="featured-thumb">
+            <img src="${c.cover}" alt="${c.title}" />
+          </div>
+          <div>
+            <div class="featured-info-title">${c.title}</div>
+            <div class="featured-info-sub">${group ? group.name : ""} • ${c.genre}</div>
+          </div>
+        `;
+        sideFeaturedListEl.appendChild(item);
+      });
+    }
+
+    // ========= STORY DETAIL + READER + WATERMARK DOWNLOAD =========
+    function openStoryDetail(comicId) {
+      const comic = findComicById(comicId);
+      if (!comic) return;
+      const group = findGroupById(comic.groupId);
+
+      const related = (comic.relatedIds || [])
+        .map(id => findComicById(id))
+        .filter(Boolean);
+
+      storyDetailContainer.innerHTML = "";
+      const panel = document.createElement("div");
+      panel.className = "detail-panel";
+      panel.innerHTML = `
+        <div class="detail-header">
+          <div class="detail-cover-wrap">
+            <img src="${comic.cover}" alt="${comic.title}" class="detail-cover" />
+            <div class="watermark-overlay"></div>
+          </div>
+          <div class="detail-main">
+            <div class="detail-title-line">
+              <div class="detail-title">${comic.title}</div>
+              ${comic.adult ? '<span class="badge-18">18+</span>' : ""}
+              ${group ? `<button class="detail-group-link" data-group="${group.id}">Nhóm dịch: ${group.name}</button>` : ""}
+            </div>
+<div class="detail-meta-line">
+  <span><b>Thể loại:</b> ${comic.genre}</span>
+  <span>•</span>
+  <span><b>Tình trạng:</b> ${comic.status}</span>
+  <span>•</span>
+  <span><b>Cập nhật cuối:</b> ${formatDate(comic.updated)}</span>
+</div>
+            <div class="detail-desc"><b>Tóm tắt:</b> ${comic.summary}</div>
+            <div class="detail-actions">
+              <button class="btn btn-read" data-comic="${comic.id}">Đọc demo</button>
+              <button class="btn btn-outline btn-download" data-comic="${comic.id}">Tải 1 trang demo (có watermark)</button>
+            </div>
+            <div class="detail-tags">
+              <div class="detail-tags-title">🔖 Nhãn / cảnh báo:</div>
+              <div class="detail-tags-list">
+                ${comic.tags.map(t => `<span class="detail-tag">${t}</span>`).join("")}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-related">
+          <div class="related-title">📚 Truyện liên quan</div>
+          <div class="related-list">
+            ${
+              related.length
+                ? related.map(r => `<button class="related-item" data-comic="${r.id}">${r.title}</button>`).join("")
+                : "<span style='font-size:11px;color:#7a5a6a;'>Chưa có gợi ý, bạn có thể tự thêm liên kết truyện sau.</span>"
+            }
+          </div>
+        </div>
+      `;
+      storyDetailContainer.appendChild(panel);
+
+      panel.querySelectorAll(".detail-group-link").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-group");
+          openGroupModal(id);
+        });
+      });
+
+      panel.querySelectorAll(".related-item").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-comic");
+          openStoryDetail(id);
+        });
+      });
+
+      panel.querySelectorAll(".btn-read").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-comic");
+          openReader(id);
+        });
+      });
+
+      panel.querySelectorAll(".btn-download").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const c = findComicById(btn.getAttribute("data-comic"));
+          if (!c || !c.pages || !c.pages.length) {
+            alert("Chưa cấu hình trang demo cho truyện này.");
+            return;
+          }
+          const pageUrl = c.pages[0];
+          const label = `thegioihu.com • ${group ? group.name : "nhóm dịch"}`;
+          try {
+            await downloadWithWatermark(pageUrl, `${c.title} - demo`, label);
+          } catch (err) {
+            console.error(err);
+            alert("Trình duyệt chặn hoặc lỗi khi tạo watermark. Hãy đảm bảo ảnh nằm cùng domain với trang.");
+          }
+        });
+      });
+    }
+
+    async function downloadWithWatermark(imgUrl, baseName, watermarkText) {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = imgUrl;
+      await new Promise((resolve, reject) => {
+        img.onload = () => resolve();
+        img.onerror = (e) => reject(e);
+      });
+
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      ctx.drawImage(img, 0, 0);
+
+      const fontSize = Math.floor(canvas.width / 18);
+      ctx.font = `${fontSize}px system-ui`;
+      ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      ctx.save();
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.rotate(-Math.PI / 5);
+      ctx.shadowColor = "rgba(0,0,0,0.6)";
+      ctx.shadowBlur = 4;
+      ctx.fillText(watermarkText, 0, 0);
+      ctx.restore();
+
+      const link = document.createElement("a");
+      link.download = `${baseName || "page"}-watermarked.jpg`;
+      link.href = canvas.toDataURL("image/jpeg", 0.9);
+      link.click();
+    }
+
+// ========= SIMPLE READER (CUỘN DỌC) =========
+const readerBackdrop = document.getElementById("readerBackdrop");
+const readerTitle = document.getElementById("readerTitle");
+const readerPages = document.getElementById("readerPages");
+const readerPageInfo = document.getElementById("readerPageInfo");
+const readerClose = document.getElementById("readerClose");
+
+let currentReaderComic = null;
+
+function openReader(comicId) {
+  const comic = findComicById(comicId);
+  if (!comic || !comic.pages || !comic.pages.length) {
+    alert("Truyện này chưa có trang demo để đọc.");
+    return;
+  }
+
+  currentReaderComic = comic;
+  readerTitle.textContent = comic.title;
+
+  // Render tất cả trang thành một list cuộn dọc
+  readerPages.innerHTML = comic.pages
+    .map(
+      (src, idx) => `
+      <div class="reader-img-wrap">
+        <img 
+          class="reader-img" 
+          src="${src}" 
+          alt="Trang ${idx + 1} - ${comic.title}" 
+          loading="lazy"
+        />
+      </div>
+    `
+    )
+    .join("");
+
+  readerPageInfo.textContent = `Tổng số trang demo: ${comic.pages.length} • Cuộn để xem tiếp`;
+  readerBackdrop.style.display = "flex";
+  document.body.style.overflow = "hidden";
+
+  // Luôn cuộn lên đầu mỗi lần mở
+  const main = readerBackdrop.querySelector(".reader-main");
+  if (main) main.scrollTop = 0;
+}
+
+function closeReader() {
+  readerBackdrop.style.display = "none";
+  document.body.style.overflow = "";
+}
+
+readerClose.addEventListener("click", closeReader);
+readerBackdrop.addEventListener("click", (e) => {
+  if (e.target === readerBackdrop) closeReader();
+});
+
+// Cho phép bấm ESC để thoát
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && readerBackdrop.style.display === "flex") {
+    closeReader();
+  }
+});
+    // ========= GROUPS =========
+    const groupListEl = document.getElementById("groupList");
+    const groupModalBackdrop = document.getElementById("groupModalBackdrop");
+    const groupModalName = document.getElementById("groupModalName");
+    const groupModalSince = document.getElementById("groupModalSince");
+    const groupModalMotto = document.getElementById("groupModalMotto");
+    const groupModalAbout = document.getElementById("groupModalAbout");
+    const groupModalMembers = document.getElementById("groupModalMembers");
+    const groupModalLinks = document.getElementById("groupModalLinks");
+    const groupModalClose = document.getElementById("groupModalClose");
+
+    function renderGroups() {
+      groupListEl.innerHTML = "";
+      GROUPS.forEach(g => {
+        const card = document.createElement("article");
+        card.className = "group-card";
+        card.onclick = () => openGroupModal(g.id);
+        card.innerHTML = `
+          <div class="group-name">${g.name}</div>
+          <div class="group-meta">${g.founded}</div>
+          <div class="group-meta">${g.motto}</div>
+        `;
+        groupListEl.appendChild(card);
+      });
+    }
+
+    function openGroupModal(id) {
+      const g = findGroupById(id);
+      if (!g) return;
+      groupModalName.textContent = g.name;
+      groupModalSince.textContent = g.founded;
+      groupModalMotto.textContent = g.motto;
+      groupModalAbout.textContent = g.about;
+      groupModalMembers.innerHTML = "";
+      (g.members || []).forEach(m => {
+        const li = document.createElement("li");
+        li.textContent = m;
+        groupModalMembers.appendChild(li);
+      });
+      groupModalLinks.innerHTML = (g.links || []).map(l => `<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join(" • ");
+      groupModalBackdrop.style.display = "flex";
+    }
+
+    groupModalClose.addEventListener("click", () => {
+      groupModalBackdrop.style.display = "none";
+    });
+    groupModalBackdrop.addEventListener("click", (e) => {
+      if (e.target === groupModalBackdrop) {
+        groupModalBackdrop.style.display = "none";
+      }
+    });
+
+    // ========= NAV SCROLL =========
+    document.querySelectorAll(".nav-link").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".nav-link").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const targetId = btn.dataset.scroll;
+        if (targetId === "top") {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          const el = document.getElementById(targetId);
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }
+      });
+    });
+
+    // ========= SEARCH =========
+    searchInput.addEventListener("input", () => {
+      renderComics();
+    });
+
+    // ========= INIT =========
+    renderChips();
+    renderComics();
+    renderFeatured();
+    renderGroups();
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Chặn chuột phải trên ảnh
+    document.addEventListener("contextmenu", (e) => {
+      if (e.target.tagName === "IMG") {
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+
+<//index.html
+/images/>
