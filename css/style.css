@@ -1,0 +1,111 @@
+/* ==== RESET ==== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: #f8f8f8;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* ==== HERO ==== */
+.hero {
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #ff90c2, #ffbad8);
+  color: white;
+}
+.hero h1 {
+  font-size: 38px;
+  font-weight: 800;
+}
+.hero p {
+  font-size: 18px;
+  opacity: 0.9;
+  margin-top: 10px;
+}
+
+/* ==== SEARCH BAR ==== */
+.search-box {
+  width: 95%;
+  max-width: 550px;
+  margin: 25px auto;
+}
+.search-box input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+/* ==== FILTER AREA ==== */
+.filter-area {
+  padding: 20px;
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+}
+.filter-group-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+/* Chips */
+.chip {
+  display: inline-block;
+  background: #eee;
+  padding: 7px 12px;
+  margin: 4px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+.chip:hover {
+  background: #ddd;
+}
+.chip.active {
+  background: #ff5da5;
+  color: white;
+}
+
+/* ==== COMIC GRID ==== */
+.comic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 18px;
+  padding: 20px;
+}
+
+.comic-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  padding: 10px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+.comic-card:hover {
+  transform: translateY(-4px);
+}
+
+.comic-card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+/* ==== FOOTER ==== */
+footer {
+  margin-top: 40px;
+  padding: 20px;
+  text-align: center;
+  background: #2a2a2a;
+  color: #fff;
+  font-size: 14px;
+}
